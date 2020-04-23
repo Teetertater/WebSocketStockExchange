@@ -10,7 +10,6 @@ public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
     private Integer orderQty;       //Order quantity (FIX <38>
     private Double price;           //price for limit orders (FIX <44>)
     private String clOrdID;         //Unique ID of order assigned by institution/intermediary ( FIX <11>)
-    private Integer bookPosition;
 
     //For casting an Order to SellOrder (needed for sorting comparator)
     public SellOrder(Order O) {
@@ -30,10 +29,8 @@ public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
     public Double getPrice() { return price; }
     public String getClOrdID() { return clOrdID; }
     public String getTimestamp() { return timestamp; }
-    public Integer getBookPosition() { return bookPosition; }
 
     public void setOrderQty(Integer orderQty) { this.orderQty = orderQty; }
-    public void setBookPosition(Integer bookPosition) { this.bookPosition = bookPosition; }
 
     @Override //Smallest first (Price, then timestamp)
     public int compareTo(SellOrder order){

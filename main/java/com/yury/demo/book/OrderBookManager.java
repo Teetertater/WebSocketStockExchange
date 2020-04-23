@@ -25,7 +25,7 @@ public class OrderBookManager {
         return tsGenerator.getCurrentTimeStamp();
     }
 
-    private ArrayList<Transaction> processBuyOrder(BuyOrder order){
+    private ArrayList<Transaction> processLimitBuyOrder(BuyOrder order){
 
         ArrayList<Transaction> currentTransactions = new ArrayList<>();
         ArrayList<SellOrder> sellOrdersToRemove = new ArrayList<>();
@@ -65,7 +65,6 @@ public class OrderBookManager {
 
             //case where the entire order can be filled with leftover shares
             else if (sellQty > buyQty) {
-                System.out.println("qty > equal");
                 currentMatchingSellOrder.setOrderQty(sellQty-buyQty);
                 sellOrders.set(sellOrders.indexOf(currentMatchingSellOrder), currentMatchingSellOrder);
                 currentTransactions.add(new Transaction(
@@ -92,7 +91,6 @@ public class OrderBookManager {
 
             //order needs multiple transactions to be filled
             else {
-                System.out.println("qty <");
                 sellOrdersToRemove.add(currentMatchingSellOrder);
                 currentTransactions.add(new Transaction(
                         "ID", //TODO,
@@ -112,14 +110,16 @@ public class OrderBookManager {
                         sellQty,
                         generateTimeStamp()
                 ));
+                order.setOrderQty(order.getOrderQty() - currentMatchingSellOrder.getOrderQty());
                 //continue filling order
             }
         }
+        buyOrders.insertBuyOrder(order);
         sellOrders.removeAll(sellOrdersToRemove);
         return currentTransactions;
     }
 
-    private ArrayList<Transaction> processSellOrder(SellOrder order){
+    private ArrayList<Transaction> processLimitSellOrder(SellOrder order){
 
         ArrayList<Transaction> currentTransactions = new ArrayList<>();
         ArrayList<BuyOrder> buyOrdersToRemove = new ArrayList<>();
@@ -204,9 +204,11 @@ public class OrderBookManager {
                         buyQty,
                         generateTimeStamp()
                 ));
+                order.setOrderQty(order.getOrderQty() - currentMatchingBuyOrder.getOrderQty());
                 //continue filling order
             }
         }
+        sellOrders.insertSellOrder(order);
         buyOrders.removeAll(buyOrdersToRemove);
         return currentTransactions;
     }
@@ -217,7 +219,7 @@ public class OrderBookManager {
             if (sellOrders.isEmpty()){
                 buyOrders.insertBuyOrder(buyOrder);
             } else {
-                return processBuyOrder(buyOrder);
+                return processLimitBuyOrder(buyOrder);
             }
 
         } else { //process sell order
@@ -225,7 +227,7 @@ public class OrderBookManager {
             if (buyOrders.isEmpty()){
                 sellOrders.insertSellOrder(sellOrder);
             } else {
-                return processSellOrder(sellOrder);
+                return processLimitSellOrder(sellOrder);
             }
         }
         return new ArrayList<>(); //return no transactions if did not process anything

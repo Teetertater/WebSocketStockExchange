@@ -14,7 +14,6 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
     private Integer orderQty;       //Order quantity (FIX <38>
     private Double price;           //price for limit orders (FIX <44>)
     private String clOrdID;         //Unique ID of order assigned by institution/intermediary ( FIX <11>)
-    private Integer bookPosition;
 
     //For casting an Order to BuyOrder (needed for sorting comparator)
     public BuyOrder(Order O) {
@@ -34,15 +33,15 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
     public Double getPrice() { return price; }
     public String getClOrdID() { return clOrdID; }
     public String getTimestamp() { return timestamp; }
-    public Integer getBookPosition() { return bookPosition; }
 
     public void setOrderQty(Integer orderQty) { this.orderQty = orderQty; }
-    public void setBookPosition(Integer bookPosition) { this.bookPosition = bookPosition; }
 
     @Override //Largest first (Price, then timestamp)
     public int compareTo(BuyOrder order){
+        //System.out.println(this);
+        //System.out.println(order);
         if (order == null || order.getPrice() == null){
-            return 1;
+            return -1;
         }
         if (!order.getPrice().equals(this.price)) {
             return -this.price.compareTo(order.getPrice());

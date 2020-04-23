@@ -98,8 +98,7 @@ $(function () {
                    { "data": "symbol" },
                    { "data": "orderQty" },
                    { "data": "price" },
-                   { "data": "clOrdID" },
-                   { "data": "bookPosition" }
+                   { "data": "clOrdID" }
                ]
            } );
     $( "#orderBookSell").DataTable({
@@ -115,8 +114,7 @@ $(function () {
                        { "data": "symbol" },
                        { "data": "orderQty" },
                        { "data": "price" },
-                       { "data": "clOrdID" },
-                       { "data": "bookPosition" }
+                       { "data": "clOrdID" }
                    ]
                } );
 });

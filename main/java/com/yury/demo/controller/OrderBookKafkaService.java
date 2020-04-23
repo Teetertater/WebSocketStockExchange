@@ -56,10 +56,6 @@ public class OrderBookKafkaService {
     private void sendOrderBookUpdateKafka() throws JsonProcessingException {
         SortedBuyOrderArray<BuyOrder> allBuyOrders = orderBookManager.getBuyOrders();
         SortedSellOrderArray<SellOrder> allSellOrders = orderBookManager.getSellOrders();
-
-        System.out.println(allBuyOrders);
-        System.out.println(allSellOrders);
-
         Boolean arraysUnchanged = false;
 
         buyTopN.clear();
@@ -77,7 +73,6 @@ public class OrderBookKafkaService {
         }
         if (!arraysUnchanged){
             String JSONifiedData = mapper.writeValueAsString(new OrderBookTopN(buyTopN, sellTopN));
-            System.out.println(JSONifiedData);
             messagingTemplate.convertAndSend(orderBookBroadcastTopic, JSONifiedData);
         }
 
