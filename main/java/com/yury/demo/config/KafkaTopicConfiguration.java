@@ -29,7 +29,7 @@ public class KafkaTopicConfiguration {
 
     @Bean
     public NewTopic AAPL_orders() { //TODO
-        return TopicBuilder.name("AAPL_orders2")
+        return TopicBuilder.name("AAPL_orders3")
                 .partitions(partitions)
                 .replicas(replicas)
                 .compact()

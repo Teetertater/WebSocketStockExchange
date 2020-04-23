@@ -1,4 +1,4 @@
-package com.yury.demo.model;
+package com.yury.demo.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,7 @@ public class SortedOrderArray<Order> extends ArrayList<Order> {
     public void insertDescending(Order order) {
         add(order);
         Comparable<Order> cmp = (Comparable<Order>) order;
+        System.out.println(size());
         for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) < 0; i--)
             Collections.swap(this, i, i-1);
     }
@@ -18,6 +19,7 @@ public class SortedOrderArray<Order> extends ArrayList<Order> {
     public void insertAscending(Order order) {
         add(order);
         Comparable<Order> cmp = (Comparable<Order>) order;
+        System.out.println(size());
         for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) >= 0; i--)
             Collections.swap(this, i, i-1);
     }

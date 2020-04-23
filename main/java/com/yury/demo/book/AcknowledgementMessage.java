@@ -1,4 +1,4 @@
-package com.yury.demo.model.messages;
+package com.yury.demo.book;
 
 import java.io.Serializable;
 
