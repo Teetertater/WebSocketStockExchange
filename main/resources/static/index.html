@@ -7,6 +7,7 @@
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="/app.js"></script>
 </head>
 <style>
@@ -89,6 +90,36 @@
             </table>
         </div>
     </div>
+    Top 10 Buy Orders for AAPL
+    <table id="orderBookBuy" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Timestamp Order Placed</th>
+            <th>Market/Limit (false is limit)</th>
+            <th>Side (false is buy)</th>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>ID</th>
+            <th>Rank</th>
+        </tr>
+        </thead>
+    </table>
+    Top 10 Sell Orders for AAPL
+    <table id="orderBookSell" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Timestamp Order Placed</th>
+            <th>Market/Limit (false is limit)</th>
+            <th>Side (false is buy)</th>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>ID</th>
+            <th>Rank</th>
+        </tr>
+        </thead>
+    </table>
 </div>
 </body>
 </html>

@@ -20,8 +20,8 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).responseCode);
-            showGreeting(JSON.parse(greeting.body).message);
+            //showGreeting(JSON.parse(greeting.body).responseCode);
+            showGreeting(JSON.parse(greeting.body));
         });
     });
 }
@@ -66,7 +66,15 @@ function sendForm() {
 }
 
 function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    //$("#greetings").append("<tr><td>" + message + "</td></tr>");
+    $("#orderBookBuy").dataTable().fnClearTable();
+    if (message.buyTopN.length !== 0) {
+        $("#orderBookBuy").dataTable().fnAddData(message.buyTopN);
+    }
+    $("#orderBookSell").dataTable().fnClearTable();
+    if (message.sellTopN.length !== 0) {
+        $("#orderBookSell").dataTable().fnAddData(message.sellTopN);
+    }
 }
 
 $(function () {
@@ -77,5 +85,39 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendForm(); });
+    $( "#orderBookBuy").DataTable({
+            "processing": true,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info" : false,
+            "columns": [
+                   { "data": "timestamp" },
+                   { "data": "ordType" },
+                   { "data": "side" },
+                   { "data": "symbol" },
+                   { "data": "orderQty" },
+                   { "data": "price" },
+                   { "data": "clOrdID" },
+                   { "data": "bookPosition" }
+               ]
+           } );
+    $( "#orderBookSell").DataTable({
+                "processing": true,
+                "searching": false,
+                "paging": false,
+                "ordering": false,
+                "info" : false,
+                "columns": [
+                       { "data": "timestamp" },
+                       { "data": "ordType" },
+                       { "data": "side" },
+                       { "data": "symbol" },
+                       { "data": "orderQty" },
+                       { "data": "price" },
+                       { "data": "clOrdID" },
+                       { "data": "bookPosition" }
+                   ]
+               } );
 });
 

@@ -18,6 +18,9 @@ public class OrderBookManager {
         this.tsGenerator = tsGenerator;
     }
 
+    public SortedSellOrderArray<SellOrder> getSellOrders() { return sellOrders; }
+    public SortedBuyOrderArray<BuyOrder> getBuyOrders() { return buyOrders; }
+
     public String generateTimeStamp(){
         return tsGenerator.getCurrentTimeStamp();
     }
@@ -214,8 +217,6 @@ public class OrderBookManager {
             if (sellOrders.isEmpty()){
                 buyOrders.insertBuyOrder(buyOrder);
             } else {
-                System.out.println(buyOrders);
-                System.out.println(sellOrders);
                 return processBuyOrder(buyOrder);
             }
 
@@ -224,13 +225,9 @@ public class OrderBookManager {
             if (buyOrders.isEmpty()){
                 sellOrders.insertSellOrder(sellOrder);
             } else {
-                System.out.println(buyOrders);
-                System.out.println(sellOrders);
                 return processSellOrder(sellOrder);
             }
         }
-        System.out.println(buyOrders);
-        System.out.println(sellOrders);
         return new ArrayList<>(); //return no transactions if did not process anything
     }
 }

@@ -22,8 +22,9 @@ public class WebSocketController {
 
     @MessageMapping("/transact")
     @SendTo("/topic/greetings")
-    public AcknowledgementMessage greeting(@RequestBody Order message) throws Exception {
+    public void greeting(@RequestBody Order message) throws Exception {
         message.setTimestamp(tsGenerator.getCurrentTimeStamp());
-        return placedOrderMarshaller.marshallOrder(message);
+        //return placedOrderMarshaller.marshallOrder(message);
+        placedOrderMarshaller.marshallOrder(message);
     }
 }
