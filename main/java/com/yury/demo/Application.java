@@ -12,11 +12,8 @@ public class Application {
 
 	@Bean
 	public java.util.function.Consumer<KTable<String, String>> transact() {
-
 		return input ->
 				input.filter((key, value) -> value.contains("side:true"));
-
-
 	}
 
 	public static void main(String[] args) {
