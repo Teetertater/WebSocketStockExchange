@@ -2,6 +2,9 @@ package com.yury.demo.book;
 
 import java.io.Serializable;
 
+/**
+ * Contains information about a transaction
+ */
 public class Transaction {
     public enum StatusCode implements Serializable {
         FILL,
@@ -23,17 +26,23 @@ public class Transaction {
     private int cumQty;
     private String updateTimeStamp;
 
-    public Transaction() {};
+    public Transaction() {}
 
-    public Transaction(String orderID, boolean side, String buyClOrdID, String sellClOrdID,
+    public Transaction(boolean side, String buyClOrdID, String sellClOrdID,
                        StatusCode statusCode, int cumQty, String updateTimeStamp) {
-        this.orderID = orderID;
         this.side = side;
         this.buyClOrdID = buyClOrdID;
         this.sellClOrdID = sellClOrdID;
         this.statusCode = statusCode;
         this.cumQty = cumQty;
         this.updateTimeStamp = updateTimeStamp;
+        this.orderID = generateNewID(side, buyClOrdID, sellClOrdID, cumQty);
+    }
+
+    //Generates a deterministic ID that can be recreated but will be unique for every transaction
+    //(Assumes transaction IDs will be unique)
+    private String generateNewID(Boolean side, String buyClOrdID, String sellClOrdID, int cumQty) {
+        return side.toString() + "_" + buyClOrdID + "_" + sellClOrdID + "_" + cumQty;
     }
 
     public String getOrderID() {

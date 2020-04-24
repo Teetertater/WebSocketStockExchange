@@ -9,18 +9,24 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfiguration {
 
-    @Value("${spring.kafka.application.topic}")
-    private String topic;
-
+    @Value("${spring.ws.orderBookBroadcastTopic}")
+    private String wsOrderBookBroadcastTopic;
+    @Value("${spring.kafka.application.orders_topic}")
+    private String kafkaOrdersTopic;
+    @Value("${spring.kafka.application.fill_topic}")
+    private String kafkaFillsTopic;
     @Value("${spring.kafka.application.partitions}")
     private int partitions;
-
     @Value("${spring.kafka.application.replicas}")
     private int replicas;
 
+    public String getWsOrderBookBroadcastTopic() { return wsOrderBookBroadcastTopic; }
+    public String getKafkaOrdersTopic() { return kafkaOrdersTopic; }
+    public String getKafkaFillsTopic() { return kafkaFillsTopic; }
+
     @Bean
-    public NewTopic transactions() {
-        return TopicBuilder.name(topic)
+    public NewTopic orders() {
+        return TopicBuilder.name(kafkaOrdersTopic)
                 .partitions(partitions)
                 .replicas(replicas)
                 .compact()
@@ -28,18 +34,8 @@ public class KafkaTopicConfiguration {
     }
 
     @Bean
-    public NewTopic AAPL_orders() { //TODO
-        return TopicBuilder.name("AAPL_orders3")
-                .partitions(partitions)
-                .replicas(replicas)
-                .compact()
-                .build();
-    }
-
-    //TODO
-    @Bean
-    public NewTopic AAPL_fill() {
-        return TopicBuilder.name(topic)
+    public NewTopic fill() {
+        return TopicBuilder.name(kafkaFillsTopic)
                 .partitions(partitions)
                 .replicas(replicas)
                 .compact()

@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+/**
+ * The main service responsible for maintaining the Order Book. Incoming buy/sell orders are checked against
+ * existing orders to see if a transaction is possible. If transactions are possible, they are returned and all
+ * orders are updated to reflect new Quantity/Prices
+ */
 @Service
 public class OrderBookManager {
 
@@ -14,10 +19,6 @@ public class OrderBookManager {
     private SortedSellOrderArray<SellOrder> sellOrders = new SortedSellOrderArray<>();
     private SortedBuyOrderArray<BuyOrder> buyOrders = new SortedBuyOrderArray<>();
 
-    public OrderBookManager(TimeStampGenerator tsGenerator) {
-        this.tsGenerator = tsGenerator;
-    }
-
     public SortedSellOrderArray<SellOrder> getSellOrders() { return sellOrders; }
     public SortedBuyOrderArray<BuyOrder> getBuyOrders() { return buyOrders; }
 
@@ -25,6 +26,11 @@ public class OrderBookManager {
         return tsGenerator.getCurrentTimeStamp();
     }
 
+    /**
+     * Checks order book against matches, updates order book, and returns transactions
+     * @param order: the buy order to be processed
+     * @return a list of transactions to be made
+     */
     private ArrayList<Transaction> processLimitBuyOrder(BuyOrder order){
 
         ArrayList<Transaction> currentTransactions = new ArrayList<>();
@@ -42,7 +48,6 @@ public class OrderBookManager {
             if (sellQty == buyQty) {
                 sellOrdersToRemove.add(currentMatchingSellOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -51,7 +56,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -68,7 +72,6 @@ public class OrderBookManager {
                 currentMatchingSellOrder.setOrderQty(sellQty-buyQty);
                 sellOrders.set(sellOrders.indexOf(currentMatchingSellOrder), currentMatchingSellOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -77,7 +80,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -93,7 +95,6 @@ public class OrderBookManager {
             else {
                 sellOrdersToRemove.add(currentMatchingSellOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -102,7 +103,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingSellOrder.getClOrdID(),
@@ -119,6 +119,11 @@ public class OrderBookManager {
         return currentTransactions;
     }
 
+    /**
+     * Checks order book against matches, updates order book, and returns transactions
+     * @param order: sell order to process
+     * @return transactions to be made
+     */
     private ArrayList<Transaction> processLimitSellOrder(SellOrder order){
 
         ArrayList<Transaction> currentTransactions = new ArrayList<>();
@@ -136,7 +141,6 @@ public class OrderBookManager {
             if (sellQty == buyQty) {
                 buyOrdersToRemove.add(currentMatchingBuyOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -145,7 +149,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -162,7 +165,6 @@ public class OrderBookManager {
                 currentMatchingBuyOrder.setOrderQty(buyQty-sellQty);
                 buyOrders.set(buyOrders.indexOf(currentMatchingBuyOrder), currentMatchingBuyOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -171,7 +173,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -187,7 +188,6 @@ public class OrderBookManager {
             else { //buyQty < sellQty
                 buyOrdersToRemove.add(currentMatchingBuyOrder);
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         false,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -196,7 +196,6 @@ public class OrderBookManager {
                         generateTimeStamp()
                 ));
                 currentTransactions.add(new Transaction(
-                        "ID", //TODO,
                         true,
                         order.getClOrdID(),
                         currentMatchingBuyOrder.getClOrdID(),
@@ -221,7 +220,6 @@ public class OrderBookManager {
             } else {
                 return processLimitBuyOrder(buyOrder);
             }
-
         } else { //process sell order
             SellOrder sellOrder = new SellOrder(order);
             if (buyOrders.isEmpty()){
@@ -230,6 +228,7 @@ public class OrderBookManager {
                 return processLimitSellOrder(sellOrder);
             }
         }
-        return new ArrayList<>(); //return no transactions if did not process anything
+        //return empty list of transactions if did not process anything
+        return new ArrayList<>();
     }
 }

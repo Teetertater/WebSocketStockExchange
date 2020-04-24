@@ -3,6 +3,10 @@ package com.yury.demo.book;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * An ArrayList of BuyOrder that orders the orders according to their priority defined in BuyOrder class
+ * @param <BuyOrder>
+ */
 public class SortedBuyOrderArray<BuyOrder> extends ArrayList<BuyOrder> {
     @SuppressWarnings("unchecked")
     public void insertBuyOrder(BuyOrder order) {

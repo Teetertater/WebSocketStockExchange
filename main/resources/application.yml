@@ -1,9 +1,10 @@
 spring:
   kafka:
     application:
-      topic: transaction_stream
       partitions: 1
       replicas: 1
+      orders_topic: AAAC_orders
+      fill_topic: AAAC_fill
     consumer:
       bootstrap-servers: localhost:9092
       group-id: group_id
@@ -14,8 +15,12 @@ spring:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  ws:
+    orderBookBroadcastTopic: "/topic/greetings"
 server:
   port: 8081
 application:
+  symbol: AAAC
+  topNLength: 10
   timezone: Europe/Vienna
   tspattern: yyyy-MM-dd HH:mm:ss.SSS

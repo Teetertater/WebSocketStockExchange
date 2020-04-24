@@ -20,8 +20,10 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
-            //showGreeting(JSON.parse(greeting.body).responseCode);
-            showGreeting(JSON.parse(greeting.body));
+            showOrders(JSON.parse(greeting.body));
+        });
+        stompClient.subscribe('/user/queue/acks', function (ack) {
+            showAck(JSON.parse(ack.body));
         });
     });
 }
@@ -35,26 +37,17 @@ function disconnect() {
 }
 
 function calculateChecksum() {
-    return (10 - (($("#orderQty").val() + $("#price").val()) % 10))
+    var sum = parseInt($("#orderQty").val()) + parseFloat($("#price").val())
+    return (10 - (sum) % 10)
 }
 
 function generateClOrdID () {
     $("#clOrdID").val(Math.floor(Math.random()*100000));
 }
 
-function togglePriceDisplay() {
-       var priceDisplay = document.getElementById("priceDisplay")
-      if ($("#ordType").is(":checked")) {
-        priceDisplay.style.display = "none";
-        $("#price").val("");
-      } else {
-        priceDisplay.style.display = "block";
-      }
-}
-
 function sendForm() {
     stompClient.send("/app/transact", {}, JSON.stringify({
-        'ordType': $("#ordType").is(":checked"),
+        'ordType': "LIMIT",
         'side'   : $("#side").is(":checked"),
         'symbol' : $("#symbol").val(),
         'orderQty' : parseInt($("#orderQty").val()),
@@ -65,8 +58,11 @@ function sendForm() {
     generateClOrdID();
 }
 
-function showGreeting(message) {
-    //$("#greetings").append("<tr><td>" + message + "</td></tr>");
+function showAck(message) {
+   $("#acks").append("<tr><td>" + message.responseCode + "</td><td>" + message.message + "</td></tr>");
+}
+
+function showOrders(message) {
     $("#orderBookBuy").dataTable().fnClearTable();
     if (message.buyTopN.length !== 0) {
         $("#orderBookBuy").dataTable().fnAddData(message.buyTopN);

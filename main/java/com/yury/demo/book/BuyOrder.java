@@ -2,13 +2,14 @@ package com.yury.demo.book;
 
 import java.util.Comparator;
 
-/**The only difference between Order, BuyOrder and SellOrder are the comparator methods,
- * due to the way the sorted array needs to be able to compare orders. BuyOrder and SellOrder also
- * cannot be subclasses of Order because of casting issues resulting in null values.
+/** Information about a buy order
+ *
+ * The only difference between Order, BuyOrder and SellOrder are the comparator methods,
+ * due to the way the sorted array needs to be able to compare orders
  **/
 public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
     private String timestamp;
-    private Boolean ordType;        //Market or Limit (FIX <40>), market = true
+    private Order.OrdType ordType;        //Market or Limit (FIX <40>), market = true
     private Boolean side;           //Buy or sell (FIX <54>), buy = true
     private String symbol;          //FIX <55>
     private Integer orderQty;       //Order quantity (FIX <38>
@@ -26,7 +27,7 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
         this.clOrdID = O.getClOrdID();
     }
 
-    public Boolean getOrdType() { return ordType; }
+    public Order.OrdType getOrdType() { return ordType; }
     public Boolean getSide() { return side; }
     public String getSymbol() { return symbol; }
     public Integer getOrderQty() {return orderQty; }
@@ -38,8 +39,6 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
 
     @Override //Largest first (Price, then timestamp)
     public int compareTo(BuyOrder order){
-        //System.out.println(this);
-        //System.out.println(order);
         if (order == null || order.getPrice() == null){
             return -1;
         }
@@ -48,7 +47,7 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
         } else {
             return -this.timestamp.compareTo(order.getTimestamp());
         }
-    };
+    }
 
     @Override //Largest first (Price, then timestamp)
     public int compare(BuyOrder order, BuyOrder order1){
@@ -57,15 +56,5 @@ public class BuyOrder implements Comparator<BuyOrder>, Comparable<BuyOrder> {
         } else {
             return -order.getTimestamp().compareTo(order1.getTimestamp());
         }
-    };
-
-    @Override
-    public String toString(){
-        String timestampString = ((this.timestamp == null) ? "null" : this.timestamp.toString());
-        String priceString = ((this.price == null) ? "null" : this.price.toString());
-
-        return priceString + " " + timestampString;
-
-    } //TODO REMOVE
-
+    }
 }

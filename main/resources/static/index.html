@@ -27,6 +27,19 @@
                     </button>
                 </div>
             </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="conversation" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Server Response</th>
+                        </tr>
+                        </thead>
+                        <tbody id="acks">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             <form>
@@ -42,31 +55,23 @@
                     </div>
                     <p></p>
                     <p></p>
-                    <label for="ordType">Order Type</label>
-                    <div>
-                        Limit
-                        <label class="switch">
-                            <input type="checkbox" checked id="ordType">
-                            <span class="slider round"></span>
-                        </label>
-                        Market
-                    </div>
+                    <label>Order Type: Limit</label>
                     <p></p>
                     <p></p>
                     <div>
                         <label for="symbol">Select Symbol</label>
                         <select id="symbol">
-                            <option value="AAPL">AAPL</option>
-                            <option value="AMZN">AMZN</option>
-                            <option value="BA">BA</option>
-                            <option value="GOOG">GOOG</option>
-                            <option value="TSLA">TSLA</option>
-                            <option value="MSFT">MSFT</option>
+                            <option value="AAAA">AAAA</option>
+                            <option value="AMZN" disabled>AMZN</option>
+                            <option value="BA" disabled>BA</option>
+                            <option value="GOOG" disabled>GOOG</option>
+                            <option value="TSLA" disabled>TSLA</option>
+                            <option value="MSFT" disabled>MSFT</option>
                         </select>
                     </div>
                     <label for="orderQty">Order Quantity</label>
                     <input type="text" id="orderQty" class="form-control" placeholder="0">
-                    <div id="priceDisplay" style="display: none">
+                    <div id="priceDisplay">
                         <label for="price">Limit Price (EUR)</label>
                         <input type="text" id="price" class="form-control" placeholder="0">
                     </div>
@@ -77,49 +82,36 @@
             </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Server Response</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <label for="orderBookBuy"> Top 10 Buy Orders for AAPL</label>
+    <label for="orderBookBuy"> Top 10 Buy Orders</label>
     <div>
         <table id="orderBookBuy" class="display" style="width:100%">
             <thead>
             <tr>
                 <th>Timestamp Order Placed</th>
-                <th>Market/Limit (false is limit)</th>
+                <th>Order Type</th>
                 <th>Side (false is buy)</th>
                 <th>Symbol</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>ID</th>
-                <th>Rank</th>
             </tr>
             </thead>
         </table>
     </div>
+    <p></p>
+    <p></p>
     <div>
-        <label for="orderBookSell">Top 10 Sell Orders for AAPL</label>
+        <label for="orderBookSell">Top 10 Sell Orders</label>
         <table id="orderBookSell" class="display" style="width:100%">
             <thead>
             <tr>
                 <th>Timestamp Order Placed</th>
-                <th>Market/Limit (false is limit)</th>
+                <th>Order Type</th>
                 <th>Side (false is sell)</th>
                 <th>Symbol</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>ID</th>
-                <th>Rank</th>
             </tr>
             </thead>
         </table>

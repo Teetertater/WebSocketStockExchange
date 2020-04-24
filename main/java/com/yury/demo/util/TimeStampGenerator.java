@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class TimeStampGenerator {
-    private static TimeStampGenerator timeStampGeneratorInstance = null;
     @Value("${application.timezone}")
     private String timezone;
 

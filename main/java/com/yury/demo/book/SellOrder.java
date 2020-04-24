@@ -2,9 +2,14 @@ package com.yury.demo.book;
 
 import java.util.Comparator;
 
+/** Information about a sell order
+ *
+ * The only difference between Order, BuyOrder and SellOrder are the comparator methods,
+ * due to the way the sorted array needs to be able to compare orders
+ **/
 public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
     private String timestamp;
-    private Boolean ordType;        //Market or Limit (FIX <40>), market = true
+    private Order.OrdType ordType;        //Market or Limit (FIX <40>), market = true
     private Boolean side;           //Buy or sell (FIX <54>), buy = true
     private String symbol;          //FIX <55>
     private Integer orderQty;       //Order quantity (FIX <38>
@@ -22,7 +27,7 @@ public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
         this.clOrdID = O.getClOrdID();
     }
 
-    public Boolean getOrdType() { return ordType; }
+    public Order.OrdType getOrdType() { return ordType; }
     public Boolean getSide() { return side; }
     public String getSymbol() { return symbol; }
     public Integer getOrderQty() {return orderQty; }
@@ -42,7 +47,7 @@ public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
         } else {
             return this.timestamp.compareTo(order.getTimestamp());
         }
-    };
+    }
 
     @Override //Smallest first (Price, then timestamp)
     public int compare(SellOrder order, SellOrder order1){
@@ -51,15 +56,5 @@ public class SellOrder implements Comparator<SellOrder>, Comparable<SellOrder> {
         } else {
             return order.getTimestamp().compareTo(order1.getTimestamp());
         }
-    };
-
-    @Override
-    public String toString(){
-        String timestampString = ((this.timestamp == null) ? "null" : this.timestamp.toString());
-        String priceString = ((this.price == null) ? "null" : this.price.toString());
-
-        return priceString + " " + timestampString;
-
     }
-    // TODO REMOVE
 }

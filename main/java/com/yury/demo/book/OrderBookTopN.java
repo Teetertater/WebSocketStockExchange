@@ -1,5 +1,8 @@
 package com.yury.demo.book;
 
+/**
+ * Class to contain top N buy and sell orders, used for JSON formatting message
+ */
 public class OrderBookTopN {
     SortedBuyOrderArray<BuyOrder> buyTopN;
     SortedSellOrderArray<SellOrder> sellTopN;

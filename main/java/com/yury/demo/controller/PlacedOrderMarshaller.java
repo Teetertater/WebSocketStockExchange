@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yury.demo.book.Order;
 import com.yury.demo.book.AcknowledgementMessage;
+import com.yury.demo.config.KafkaTopicConfiguration;
+import com.yury.demo.util.OrderValidityChecker;
 import org.apache.kafka.clients.producer.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,43 +13,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-//TODO refactor (combine with producerService)
 @Service
 public class PlacedOrderMarshaller {
-
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(Producer.class);
     ObjectMapper mapper = new ObjectMapper();
 
-    public PlacedOrderMarshaller() {};
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired
+    KafkaTopicConfiguration kafkaTopicConfiguration;
+    @Autowired
+    private OrderValidityChecker orderValidityChecker;
 
+    public PlacedOrderMarshaller() {}
+
+    /**
+     * Sends order to Kafka queue for processing if it is valid
+     * @param orderMessage: Received order message from WebSocket
+     * @return AcknowledgementMessage: Validity determined by ValidityChecker with accompanying message
+     * @throws JsonProcessingException
+     */
     public AcknowledgementMessage marshallOrder(Order orderMessage) throws JsonProcessingException {
-        /**
-        orderMessage.getOrdType(),
-                orderMessage.getSide(),
-                orderMessage.getSymbol(),
-                orderMessage.getOrderQty(),
-                orderMessage.getPrice(),
-                orderMessage.getClOrdID(),
-                orderMessage.getChecksum()
-        **/
+        AcknowledgementMessage ack = orderValidityChecker.validOrder(orderMessage);
 
-        boolean hasErrors = false;
-        if (hasErrors) {
-            return new AcknowledgementMessage(AcknowledgementMessage.ResponseCode.ERROR, "Please review order");
+        if (ack.getResponseCode() == AcknowledgementMessage.ResponseCode.ORDER_ACCEPTED) {
+            placeOrderKafka(orderMessage.getClOrdID(), orderMessage);
         }
-
-        String kafkaTopic = orderMessage.getSymbol() + "_orders3";
-        placeOrderKafka(orderMessage.getClOrdID(), kafkaTopic, orderMessage);
-
-        return new AcknowledgementMessage(AcknowledgementMessage.ResponseCode.ORDER_ACCEPTED, "Order has been placed");
+        return ack;
     }
 
-    public void placeOrderKafka(String key, String topic, Order order) throws JsonProcessingException {
+    /**
+     * Converts order to JSON and sends on Kafka queue.
+     * @param order: Order object
+     * @throws JsonProcessingException
+     */
+    public void placeOrderKafka(String key, Order order) throws JsonProcessingException {
         String JSONifiedOrder = mapper.writeValueAsString(order);
-        logger.info(String.format("#### -> Producing message -> %s", JSONifiedOrder));
-        this.kafkaTemplate.send(topic, key, JSONifiedOrder);
+        logger.info(String.format("#### -> Sending new order message -> %s", JSONifiedOrder));
+        this.kafkaTemplate.send(kafkaTopicConfiguration.getKafkaOrdersTopic(), order.getClOrdID(), JSONifiedOrder);
     }
 }

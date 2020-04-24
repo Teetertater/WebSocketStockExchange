@@ -2,8 +2,11 @@ package com.yury.demo.book;
 
 import java.io.Serializable;
 
+/**
+ * Message of acknowledgement for orders received
+ */
 public class AcknowledgementMessage {
-    public static enum ResponseCode implements Serializable {
+    public enum ResponseCode implements Serializable {
         ERROR,
         ORDER_ACCEPTED,
         INFO;
@@ -16,7 +19,7 @@ public class AcknowledgementMessage {
     private ResponseCode responseCode; //One of: "Error" "Success" "Info"
     private String message;
 
-    public AcknowledgementMessage() {};
+    public AcknowledgementMessage() {}
 
     public AcknowledgementMessage(ResponseCode responseCode, String message) {
         this.responseCode = responseCode;
