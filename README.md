@@ -11,6 +11,6 @@ Implemented with Kafka messaging queues for order persistence and WebSockets for
 1)  [Install Gradle](https://spring.io/guides/gs/gradle/#initial)  
 2)  [Install Apache Kafka (Tested with version 2.5.0)](https://kafka.apache.org/quickstart)  
 3)  Download all the files and cd into directory
-4)  Run `gradlew build`  
+4)  Run `gradlew build -x test` (gradle can be built with tests after running once, due to auto-creation of kafka topics)  
 5)  Run `gradlew run`    
 6)  Access client UI (default is [localhost:8081](http://localhost:8081) but can be changed in application.yml)
