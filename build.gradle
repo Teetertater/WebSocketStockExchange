@@ -5,6 +5,7 @@ plugins {
 	id 'java'
 }
 
+mainClassName = 'com.yury.demo.Application'
 group = 'com.yury'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'

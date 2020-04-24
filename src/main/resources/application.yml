@@ -3,8 +3,8 @@ spring:
     application:
       partitions: 1
       replicas: 1
-      orders_topic: AAAC_orders
-      fill_topic: AAAC_fill
+      orders_topic: AAAA_orders
+      fill_topic: AAAA_fill
     consumer:
       bootstrap-servers: localhost:9092
       group-id: group_id
@@ -20,7 +20,7 @@ spring:
 server:
   port: 8081
 application:
-  symbol: AAAC
+  symbol: AAAA
   topNLength: 10
   timezone: Europe/Vienna
   tspattern: yyyy-MM-dd HH:mm:ss.SSS
