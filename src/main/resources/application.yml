@@ -1,0 +1,26 @@
+spring:
+  kafka:
+    application:
+      partitions: 1
+      replicas: 1
+      orders_topic: AAAC_orders
+      fill_topic: AAAC_fill
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  ws:
+    orderBookBroadcastTopic: "/topic/greetings"
+server:
+  port: 8081
+application:
+  symbol: AAAC
+  topNLength: 10
+  timezone: Europe/Vienna
+  tspattern: yyyy-MM-dd HH:mm:ss.SSS
