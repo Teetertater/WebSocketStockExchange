@@ -4,6 +4,8 @@
 This is a basic Stock Exchange service enabling users to place orders and view a live-updating Top 10 list of buy/sell orders
 Implemented with Kafka messaging queues for order persistence and WebSockets for handling client connections. Includes a simple user interface.
 
+__(This was completed over the course of a week for an interview challenge in 2020)__
+
 ### Architecture:
 ![architecture image](architecture.png)
 
